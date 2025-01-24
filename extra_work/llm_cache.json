@@ -1,0 +1,86 @@
+{
+    "gpt-4o__Give me the total sales revenue": {
+        "query_json": {
+            "metrics": [
+                "total_revenue"
+            ],
+            "dimensions": [],
+            "filters": []
+        },
+        "semantic_layer_json": {
+            "metrics": [
+                {
+                    "name": "total_revenue",
+                    "sql": "SUM(sale_price)",
+                    "table": "order_items"
+                }
+            ],
+            "dimensions": [],
+            "joins": []
+        }
+    },
+    "gpt-4o__Show me order details for orders over $1000 in value": {
+        "query_json": {
+            "metrics": [
+                "total_order_value"
+            ],
+            "dimensions": [
+                "order_id",
+                "status",
+                "gender",
+                "num_of_item",
+                "created_at"
+            ],
+            "filters": [
+                {
+                    "field": "total_order_value",
+                    "operator": ">",
+                    "value": 1000
+                }
+            ]
+        },
+        "semantic_layer_json": {
+            "metrics": [
+                {
+                    "name": "total_order_value",
+                    "sql": "SUM(order_items.sale_price)",
+                    "table": "order_items"
+                }
+            ],
+            "dimensions": [
+                {
+                    "name": "order_id",
+                    "sql": "orders.order_id",
+                    "table": "orders"
+                },
+                {
+                    "name": "status",
+                    "sql": "orders.status",
+                    "table": "orders"
+                },
+                {
+                    "name": "gender",
+                    "sql": "orders.gender",
+                    "table": "orders"
+                },
+                {
+                    "name": "num_of_item",
+                    "sql": "orders.num_of_item",
+                    "table": "orders"
+                },
+                {
+                    "name": "created_at",
+                    "sql": "orders.created_at",
+                    "table": "orders"
+                }
+            ],
+            "joins": [
+                {
+                    "one": "orders",
+                    "many": "order_items",
+                    "join": "order_items.order_id = orders.order_id"
+                }
+            ]
+        }
+    }
+}
